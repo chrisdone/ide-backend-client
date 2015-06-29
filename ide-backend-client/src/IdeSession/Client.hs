@@ -34,10 +34,7 @@ import IdeSession.Client.JsonAPI
 import IdeSession.Client.Cabal
 #endif
 
-data ClientIO = ClientIO
-    { sendResponse :: Response -> IO ()
-    , receiveRequest :: IO (Either String Request)
-    }
+
 
 startEmptySession :: ClientIO -> Options -> EmptyOptions -> IO ()
 startEmptySession clientIO Options{..} EmptyOptions = do
@@ -50,14 +47,14 @@ startEmptySession clientIO Options{..} EmptyOptions = do
 startCabalSession :: ClientIO -> Options -> CabalOptions -> IO ()
 startCabalSession clientIO options cabalOptions = do
     sendWelcome clientIO
-    bracket (initCabalSession options cabalOptions)
+    bracket (initCabalSession clientIO options cabalOptions)
             shutdownSession
             (mainLoop clientIO)
 
 sendTargetsList :: ClientIO -> FilePath -> IO ()
 sendTargetsList clientIO fp = do
     sendWelcome clientIO
-    sendResponse clientIO =<< listTargets fp
+    sendResponse clientIO . ResponseListTargets =<< listTargets fp
 #endif
 
 sendWelcome :: ClientIO -> IO ()

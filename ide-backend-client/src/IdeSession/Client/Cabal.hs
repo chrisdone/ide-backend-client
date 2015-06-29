@@ -32,8 +32,8 @@ listTargets cabalRoot = do
     lbi <- getPersistBuildConfig (cabalRoot </> "dist")
     return $ availableTargets lbi
 
-initCabalSession :: Options -> CabalOptions -> IO IdeSession
-initCabalSession Options{..} CabalOptions{..} = do
+initCabalSession :: ClientIO -> Options -> CabalOptions -> IO IdeSession
+initCabalSession ClientIO{..} Options{..} CabalOptions{..} = do
     lbi <- getPersistBuildConfig (cabalRoot </> "dist")
     (comp, clbi, exts) <- resolveBuildTarget lbi cabalTarget
     mods <- componentModules cabalRoot comp
@@ -48,8 +48,8 @@ initCabalSession Options{..} CabalOptions{..} = do
     session <- initSession initParams config
     setGhcOpts session exts
     let loadModules = mconcat $ map updateSourceFileFromFile mods
-    updateSession session loadModules (putEnc . ResponseUpdateSession . Just)
-    putEnc $ ResponseUpdateSession Nothing
+    updateSession session loadModules (sendResponse . ResponseUpdateSession . Just)
+    sendResponse $ ResponseUpdateSession Nothing
     -- dumpIdInfo session
     return session
   where
