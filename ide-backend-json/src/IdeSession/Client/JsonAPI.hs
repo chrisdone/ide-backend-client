@@ -113,6 +113,7 @@ data RequestSessionUpdate =
 data Response =
     -- | Sent on session initialization
     ResponseWelcome VersionInfo
+  | ResponseListTargets [String]
     -- | Nothing indicates the update completed
   | ResponseUpdateSession (Maybe Progress)
   | ResponseGetSourceErrors [SourceError]
@@ -340,6 +341,9 @@ instance Json Response where
           property "response" "welcome"
         . fromPrism responseWelcome
         . prop "version"
+      ,   property "response" "listTargets"
+        . fromPrism responseListTargets
+        . prop "targets"
       ,   property "response" "sessionUpdate"
         . fromPrism responseUpdateSession
         . optProp "progress"

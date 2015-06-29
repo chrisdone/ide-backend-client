@@ -27,7 +27,7 @@ main = do
     StartEmptySession opts' -> startEmptySession clientIO opts opts'
 #ifdef USE_CABAL
     StartCabalSession opts' -> startCabalSession clientIO opts opts'
-    ListTargets opts' -> sendTargetsList clientIO opts opts'
+    ListTargets filepath -> sendTargetsList clientIO filepath
 #else
     StartCabalSession _ -> notBuiltWithCabal
     ListTargets _ -> notBuiltWithCabal
