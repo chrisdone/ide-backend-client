@@ -44,6 +44,7 @@ iso f g = top (stackPrism f (Just . g))
 instance Json String          where grammar = string
 instance Json Lazy.ByteString where grammar = lazyByteString
 instance Json BS.ByteString   where grammar = bytestring
+instance Json Bool            where grammar = boolean
 
 -- | Define a grammar by enumerating the possible values
 --
@@ -67,6 +68,9 @@ lazyByteString = fromPrism (iso Lazy.fromString Lazy.toString) . grammar
 -- | Strict bytestring literal
 bytestring :: Grammar Val (Value :- t) (BS.ByteString :- t)
 bytestring = fromPrism (iso BS.fromString BS.toString) . grammar
+
+boolean :: Grammar Val (Value :- t) (Bool :- t)
+boolean = enumeration [(True, "true"), (False, "false")]
 
 -- | Optional property
 optProp :: Json a => Text -> Grammar Obj t (Maybe a :- t)
