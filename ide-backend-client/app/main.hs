@@ -8,10 +8,13 @@ import IdeSession.Client
 import IdeSession.Client.CmdLine
 import IdeSession.Client.JsonAPI (apiDocs, toJSON, fromJSON)
 import IdeSession.Client.Util.ValueStream (newStream, nextInStream)
-import System.IO (stdin, stdout)
+import System.IO (stdin, stdout, stderr, hSetBuffering, BufferMode(..))
 
 main :: IO ()
 main = do
+  hSetBuffering stdout NoBuffering
+  hSetBuffering stderr NoBuffering
+
   input <- newStream stdin
   -- We separate JSON values in the output by newlines, so that
   -- editors have a means to split the input into separate
@@ -27,7 +30,7 @@ main = do
     StartEmptySession opts' -> startEmptySession clientIO opts opts'
 #ifdef USE_CABAL
     StartCabalSession opts' -> startCabalSession clientIO opts opts'
-    ListTargets opts' -> sendTargetsList clientIO opts opts'
+    ListTargets filepath -> sendTargetsList clientIO filepath
 #else
     StartCabalSession _ -> notBuiltWithCabal
     ListTargets _ -> notBuiltWithCabal

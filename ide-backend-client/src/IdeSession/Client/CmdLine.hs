@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module IdeSession.Client.CmdLine (
     -- * Types
-    Options(..)
+    ClientIO(..)
+  , Options(..)
   , Command(..)
   , EmptyOptions(..)
   , CabalOptions(..)
@@ -18,10 +19,16 @@ import qualified Options.Applicative.Help.Chunk as Chunk
 import qualified Text.PrettyPrint.ANSI.Leijen   as Doc
 
 import IdeSession
+import IdeSession.Client.JsonAPI
 
 {-------------------------------------------------------------------------------
   Types
 -------------------------------------------------------------------------------}
+
+data ClientIO = ClientIO
+    { sendResponse :: Response -> IO ()
+    , receiveRequest :: IO (Either String Request)
+    }
 
 data Options = Options {
     optInitParams :: SessionInitParams
