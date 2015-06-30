@@ -2,13 +2,14 @@
 
 module Main where
 
+import Control.Monad (when)
 import Data.Aeson (encode)
 import Data.ByteString.Lazy.Char8 (hPutStrLn)
 import IdeSession.Client
 import IdeSession.Client.CmdLine
 import IdeSession.Client.JsonAPI (apiDocs, toJSON, fromJSON)
 import IdeSession.Client.Util.ValueStream (newStream, nextInStream)
-import System.IO (stdin, stdout)
+import System.IO (stdin, stdout, hSetBuffering, BufferMode(..))
 
 main :: IO ()
 main = do
@@ -22,6 +23,7 @@ main = do
         , receiveRequest = fmap fromJSON $ nextInStream input
         }
   opts <- getCommandLineOptions
+  when (bufferIO $ optIFConfig opts) $ hSetBuffering stdout NoBuffering
   case optCommand opts of
     ShowAPI -> putStrLn apiDocs
     StartEmptySession opts' -> startEmptySession clientIO opts opts'
