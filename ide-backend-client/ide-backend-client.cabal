@@ -14,7 +14,7 @@ cabal-version:       >=1.10
 
 flag use-cabal
   description: Enable ide-backend-client cabal support
-  default: True
+  default: False
 
 library
   hs-source-dirs:      src
@@ -35,7 +35,7 @@ library
                        JsonGrammar          >= 1.0  && < 1.1,
                        aeson                >= 0.7  && < 0.9,
                        ansi-wl-pprint       >= 0.6  && < 0.7,
-                       attoparsec           >= 0.12 && < 0.13,
+                       attoparsec           >= 0.12,
                        bytestring           >= 0.10 && < 0.11,
                        directory            >= 1.2  && < 1.3,
                        filepath             >= 1.3  && < 1.5,
