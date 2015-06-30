@@ -4,6 +4,7 @@ module IdeSession.Client.CmdLine (
     Options(..)
   , Command(..)
   , EmptyOptions(..)
+  , InterfaceConfig(..)
   , CabalOptions(..)
     -- * Parsing
   , getCommandLineOptions
@@ -26,6 +27,7 @@ import IdeSession
 data Options = Options {
     optInitParams :: SessionInitParams
   , optConfig     :: SessionConfig
+  , optIFConfig   :: InterfaceConfig
   , optCommand    :: Command
   }
   deriving Show
@@ -39,6 +41,10 @@ data Command =
 
 data EmptyOptions = EmptyOptions
   deriving Show
+
+data InterfaceConfig = InterfaceConfig {
+    bufferIO :: Bool
+  } deriving Show
 
 data CabalOptions = CabalOptions {
     cabalTarget :: String
@@ -54,6 +60,7 @@ parseOptions :: Parser Options
 parseOptions = Options
   <$> parseInitParams
   <*> parseConfig
+  <*> parseIFConfig
   <*> parseCommand
 
 parseCommand :: Parser Command
@@ -71,6 +78,13 @@ parseCommand = subparser $ mconcat [
         (helper <*> pure ShowAPI)
         (progDesc "Show the JSON API documentation")
     ]
+
+parseIFConfig :: Parser InterfaceConfig
+parseIFConfig = InterfaceConfig
+    <$> (flag False True $ mconcat [
+          long "unbuffered"
+        , help "Do not buffer stdout (useful for piping with interactive environments)"
+        ])
 
 parseEmptyOptions :: Parser EmptyOptions
 parseEmptyOptions = pure EmptyOptions
