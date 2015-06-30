@@ -42,6 +42,7 @@ iso f g = top (stackPrism f (Just . g))
 -------------------------------------------------------------------------------}
 
 instance Json String          where grammar = string
+instance Json Bool            where grammar = bool
 instance Json Lazy.ByteString where grammar = lazyByteString
 instance Json BS.ByteString   where grammar = bytestring
 
@@ -59,6 +60,9 @@ enumeration = mconcat . map aux
 -- | String literal
 string :: Grammar Val (Value :- t) (String :- t)
 string = fromPrism (iso Text.unpack Text.pack) . grammar
+
+bool :: Grammar Val (Value :- t) (Bool :- t)
+bool = enumeration [(True, "true"), (False, "false")]
 
 -- | Lazy bytestring literal
 lazyByteString :: Grammar Val (Value :- t) (Lazy.ByteString :- t)
