@@ -13,7 +13,7 @@ Install with:
     $ cd stack-ide
     $ stack install \
         stack-ide \
-        stack-ide-api \ 
+        stack-ide-api \
         ../ide-backend/ide-backend \
         ../ide-backend/ide-backend-rts \
         ../ide-backend/ide-backend-server \
