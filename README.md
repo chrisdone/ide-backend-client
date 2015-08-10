@@ -8,8 +8,7 @@ This is currently a work in progress. Patches welcome.
 
 Install with:
 
-    git clone https://github.com/fpco/ide-backend.git
-    git clone https://github.com/commercialhaskell/stack-ide.git
+    git clone --recursive https://github.com/commercialhaskell/stack-ide.git
     cd stack-ide
     stack install \
         stack-ide \
