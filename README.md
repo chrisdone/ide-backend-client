@@ -8,15 +8,14 @@ This is currently a work in progress. Patches welcome.
 
 Install with:
 
-    git clone https://github.com/fpco/ide-backend.git
-    git clone https://github.com/commercialhaskell/stack-ide.git
+    git clone --recursive https://github.com/commercialhaskell/stack-ide.git
     cd stack-ide
     stack install \
         stack-ide \
         stack-ide-api \
-        ../ide-backend/ide-backend \
-        ../ide-backend/ide-backend-server \
-        ../ide-backend/ide-backend-common
+        ide-backend/ide-backend \
+        ide-backend/ide-backend-server \
+        ide-backend/ide-backend-common
 
 GHC 7.10 has some GHC API bug fixes which show up in ide-backend in
 GHC 7.8, so the `stack.yaml` references a nightly Stackage build which
